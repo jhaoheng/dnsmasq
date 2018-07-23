@@ -1,0 +1,13 @@
+version: "3.2"
+services: 
+  discovery:
+    build: .
+    image: orbweb/dnsmasq:latest
+    container_name: discovery
+    hostname: etcd.discovery
+    cap_add:
+      - ALL # need NET_ADMIN
+    volumes:
+      - ./dnsmasq-conf/:/home/dnsmasq
+      - ./etc/resolv.conf:/etc/resolv.conf
+    command: bash -c "dnsmasq --hostsdir=/home/dnsmasq/hosts --conf-dir=/home/dnsmasq/confs && while [[ true ]]; do sleep 60; done"
